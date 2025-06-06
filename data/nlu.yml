@@ -1,0 +1,157 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+- intent: trigger_leave
+  examples: |
+    - I want to apply for leave
+    - apply leave
+    - I am planning to take a leave
+    - Can I take a day off?
+    - Need a day off
+    - Planning leave
+    - I want to request a leave
+    - leave
+    - My [birthday](duration_leave) is coming up, I want to take leave
+    - Can I apply for leave for [a family emergency](reason_leave)?
+    - i want [2 days](duration_leave) leave to [attend a wedding](reason_leave)
+    - Can I apply leave for [pongal](reason_leave)?
+    - I want leave on [Jan 6th](duration_leave)
+    - Can I take off [February 14](duration_leave)?
+    - I need leave [next Monday](duration_leave)
+    - I want to apply for leave from [Jan 6th to 9th](duration_leave) to [visit my hometown](reason_leave)
+    - I want to apply for leave from [March 1st to March 5th](duration_leave) for [medical treatment](reason_leave)
+    - I need leave from [6th to 10th April](duration_leave) to [attend a wedding](reason_leave)
+    - I want leave from [May 12th to 15th](duration_leave) to [rest at home](reason_leave)
+    - I want leave for [a medical appointment](reason_leave)
+    - I would like to apply for leave
+    - I need to take a day off
+    - Can I take a leave from [Jan 3 to Jan 7](duration_leave) for [family reasons](reason_leave)?
+    - Leave needed [March 8 to 10](duration_leave) to [travel for a wedding](reason_leave)
+    - I would like to take leave [from 12 to 14 June](duration_leave) to [attend a ceremony](reason_leave)
+    - Requesting leave between [May 1st to May 5th](duration_leave) to [visit my parents](reason_leave)
+
+
+- intent: duration_leave
+  examples: |
+    - from 9th January to 18th January
+    - on the 16th of March
+    - for the next week
+    - January 9th
+    - tomorrow
+    - next week
+    - next month
+    - next Monday
+    - next Friday
+    - 10th Jan to 12th Jan
+    - March 6th to 7th
+    - April 2 to 3
+
+- intent: reason_leave
+  examples: |
+    - Wanna visit my hometown
+    - sick leave
+    - watching movie
+    - visit my hometown
+    - feeling unwell
+    - family emergency
+    - feeling under the weather
+    - personal reasons
+    - wedding
+    - attending a seminar
+    - going to my native
+    - relaxing
+
+- regex: duration_leave
+  examples: |
+    - \b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s\d{1,2}\b
+    - \b\d{1,2}(st|nd|rd|th)?\s(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b
+    - \b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s\d{1,2}\s?(to|\-)\s?(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)?\s?\d{1,2}(st|nd|rd|th)?\b
+    - \b\d{1,2}(st|nd|rd|th)?\s?(to|\-)\s?\d{1,2}(st|nd|rd|th)?\s(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b
