@@ -71,7 +71,7 @@ responses:
   utter_goodbye:
     - text: "Bye"
   utter_iamabot:
-    - text: "I am a bot, developed by J."
+    - text: "I am an HR Bot created to assist you with your HR-related queries. How can I help you today?"
   utter_ask_duration_leave:
     - text: "What would be the duration of your leave?"
   utter_ask_reason_leave:

@@ -57,6 +57,10 @@ nlu:
     - feeling like a king
     - wonderful
     - I am feeling very good
+    - I feel awesome
+    - I am feeling great
+    - I am feeling amazing
+    - I feel good
     - I am great
     - I am amazing
     - I am going to save the world
@@ -89,6 +93,15 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+    - are you a robot?
+    - who are you?
+    - are you a real person?
+    - are you a real human?
+    - are you a real person?
+    - what are you?
+    - are you a chatbot?
+    - are you a virtual assistant?
+    
 - intent: trigger_leave
   examples: |
     - I want to apply for leave
