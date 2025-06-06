@@ -5,7 +5,7 @@ __pycache__/
 
 # Rasa models
 models/
-
+.rasa/
 # Python virtual environments
 .venvrasa/
 .venv/
