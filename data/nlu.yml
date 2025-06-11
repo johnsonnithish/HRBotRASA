@@ -135,6 +135,13 @@ nlu:
 - intent: duration_leave
   examples: |
     - from 9th January to 18th January
+    - from 6th to 9th January
+    - from january 6th to 9th
+    - from 6th to 9th Jan
+    - from 6th to 9th of January
+    - from 6th to 9th of Jan
+    - from 6th to 9th of nov 2024
+    - from 6th to 9th of February 2024
     - on the 16th of March
     - for the next week
     - January 9th
@@ -168,3 +175,4 @@ nlu:
     - \b\d{1,2}(st|nd|rd|th)?\s(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b
     - \b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s\d{1,2}\s?(to|\-)\s?(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)?\s?\d{1,2}(st|nd|rd|th)?\b
     - \b\d{1,2}(st|nd|rd|th)?\s?(to|\-)\s?\d{1,2}(st|nd|rd|th)?\s(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b
+    - (from )?(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]* \d{1,2} (to|-|until) (jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)?[a-z]* \d{1,2}
