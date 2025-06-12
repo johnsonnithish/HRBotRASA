@@ -11,6 +11,11 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+  
+- rule: Fallback when the bot doesn't understand
+  steps:
+    - intent: nlu_fallback
+    - action: utter_fallback
 
 - rule: Handle greeting anytime
   steps:

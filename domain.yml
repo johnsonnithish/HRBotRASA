@@ -68,6 +68,8 @@ responses:
     - text: "Did that help you?"
   utter_happy:
     - text: "Great, carry on!"
+  utter_fallback:
+    - text: "Sorry, I didn't get that. Can you please rephrase?"
   utter_goodbye:
     - text: "Bye"
   utter_iamabot:

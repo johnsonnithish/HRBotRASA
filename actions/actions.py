@@ -15,6 +15,7 @@ def normalize_year(date_obj):
 
 
 leave_file= "store_leave.json"
+
 def load_leave_data():
     if os.path.exists(leave_file):
         with open(leave_file, "r") as f:
@@ -25,12 +26,13 @@ def save_leave_data(data):
     with open(leave_file, "w") as f:
         json.dump(data, f, indent=2)
 
-def add_leave(sender_id, start, end):
+def add_leave(sender_id, start, end, reason):
     data = load_leave_data()
     user_leaves = data.get(sender_id, [])
     user_leaves.append({
         "start": start.strftime("%Y-%m-%d"),
-        "end": end.strftime("%Y-%m-%d")
+        "end": end.strftime("%Y-%m-%d"),
+        "reason": reason
     })
     data[sender_id] = user_leaves
     save_leave_data(data)
@@ -91,17 +93,8 @@ class ActionSubmitLeaveForm(Action):
                 end_date = normalize_year(parse(parts[1].strip())) if len(parts) == 2 else start_date
             else:
                 start_date = end_date = parse(text.strip())
-            if not start_date or not end_date:
-                raise ValueError("Invalid date format")
-
-            if start_date > end_date:
-                raise ValueError("Start date cannot be after end date")
-
-            if check_overlap(sender_id, start_date, end_date):
-                dispatcher.utter_message(text="You already have a leave scheduled during this time.")
-                return []
-
-            add_leave(sender_id, start_date, end_date)
+            
+            add_leave(sender_id, start_date, end_date, reason)
             message = f"Your leave for '{reason}' {formatted_duration} has been posted!"
             dispatcher.utter_message(text=message)
             dispatcher.utter_message(response="utter_continue_convo")
@@ -127,12 +120,42 @@ class ValidateLeaveForm(FormValidationAction):
         tracker: Tracker,
         domain: Dict[Text, Any],
     ) -> Dict[Text, Any]:
+        from dateparser import parse
+
+        sender_id = tracker.sender_id
+
         duration_entities = [
             e for e in tracker.latest_message.get("entities", [])
             if e.get("entity") == "duration_leave" and isinstance(e.get("value"), str)
         ]
 
         if duration_entities:
-            longest = max(duration_entities, key=lambda e: len(e["value"]))
-            return {"duration_leave": longest["value"]}
-        return {"duration_leave": slot_value}
+            slot_value = max(duration_entities, key=lambda e: len(e["value"]))["value"]
+
+        duration_text = slot_value.lower().replace("from", "").strip()
+        parts = duration_text.split("to")
+
+        try:
+            if len(parts) == 2:
+                start = normalize_year(parse(parts[0].strip()))
+                end = normalize_year(parse(parts[1].strip()))
+            else:
+                start = end = normalize_year(parse(duration_text.strip()))
+
+            if not start or not end:
+                raise ValueError("Invalid date format")
+
+            if start > end:
+                dispatcher.utter_message(text="The start date cannot be after the end date.")
+                return {"duration_leave": None}
+
+            if check_overlap(sender_id, start, end):
+                dispatcher.utter_message(text="That duration overlaps with an existing leave. Please choose different dates.")
+                return {"duration_leave": None}
+
+            return {"duration_leave": slot_value}
+
+        except Exception as e:
+            dispatcher.utter_message(text="I couldn't understand that leave duration. Please rephrase.")
+            return {"duration_leave": None}
+
