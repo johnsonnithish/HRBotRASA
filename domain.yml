@@ -47,6 +47,15 @@ slots:
         conditions:
           - active_loop: leave_form
             requested_slot: reason_leave
+  confirm_leave:
+    type: any
+    mappings:
+      - type: from_intent
+        intent: affirm
+        value: true
+      - type: from_intent
+        intent: deny
+        value: false
 
 
 
@@ -56,6 +65,7 @@ forms:
     required_slots:
       - duration_leave
       - reason_leave
+      - confirm_leave
 
 
 responses:
@@ -80,6 +90,11 @@ responses:
     - text: "What is the reason for your absence?"
   utter_continue_convo:
     - text: "What else would you like to do?"
+  utter_ask_confirm_leave:
+    - text: |
+        Leave Reason: {reason_leave}
+        Leave Duration: {duration_leave}
+        Would you like me to post the leave application?
 
 
 

@@ -29,3 +29,11 @@ rules:
     - active_loop: leave_form
     - active_loop: null
     - action: submit_leave_form
+
+- rule: Submit leave form after confirmation
+  condition:
+    - active_loop: leave_form
+  steps:
+    - action: leave_form
+    - active_loop: null
+    - action: submit_leave_form

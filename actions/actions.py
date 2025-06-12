@@ -5,7 +5,7 @@ from dateparser import parse
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.events import SlotSet
+from rasa_sdk.events import SlotSet, ActiveLoop
 from datetime import datetime
 
 def normalize_year(date_obj):
@@ -80,33 +80,46 @@ class ActionSubmitLeaveForm(Action):
     async def run(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]
     ) -> List[Dict[Text, Any]]:
+        confirm = tracker.get_slot("confirm_leave")
         reason = tracker.get_slot("reason_leave")
         duration = tracker.get_slot("duration_leave")
         formatted_duration = self.parse_dates(duration)
         sender_id = tracker.sender_id
 
-        try:
-            text = formatted_duration.lower().replace("from", "").strip()
-            parts = text.split("to")
-            if len(parts) == 2:
-                start_date = normalize_year(parse(parts[0].strip()))
-                end_date = normalize_year(parse(parts[1].strip())) if len(parts) == 2 else start_date
-            else:
-                start_date = end_date = parse(text.strip())
-            
-            add_leave(sender_id, start_date, end_date, reason)
-            message = f"Your leave for '{reason}' {formatted_duration} has been posted!"
-            dispatcher.utter_message(text=message)
-            dispatcher.utter_message(response="utter_continue_convo")
+        if confirm:
+            try:
+                text = formatted_duration.lower().replace("from", "").strip()
+                parts = text.split("to")
+                if len(parts) == 2:
+                    start_date = normalize_year(parse(parts[0].strip()))
+                    end_date = normalize_year(parse(parts[1].strip())) if len(parts) == 2 else start_date
+                else:
+                    start_date = end_date = parse(text.strip())
+                
+                add_leave(sender_id, start_date, end_date, reason)
+                message = f"Your leave for '{reason}' {formatted_duration} has been posted!"
+                dispatcher.utter_message(text=message)
+                dispatcher.utter_message(response="utter_continue_convo")
 
-        except ValueError as e:
-            dispatcher.utter_message(text=f"Error processing your leave request: {str(e)}")
-            return []
+            except ValueError as e:
+                dispatcher.utter_message(text=f"Error processing your leave request: {str(e)}")
+                return []
 
-        return [
-            SlotSet("reason_leave", None),
-            SlotSet("duration_leave", None)
-        ]
+            return [
+                SlotSet("reason_leave", None),
+                SlotSet("duration_leave", None),
+                SlotSet("confirm_leave", None)
+            ]
+        else:
+            dispatcher.utter_message(text="Let's update your leave request.")
+            if not reason or not duration:
+                return [SlotSet("confirm_leave", None)]
+            return [
+                SlotSet("duration_leave", None),
+                SlotSet("reason_leave", None),
+                SlotSet("confirm_leave", None),
+                ActiveLoop("leave_form")
+            ]
 
 
 class ValidateLeaveForm(FormValidationAction):
