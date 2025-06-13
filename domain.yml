@@ -47,6 +47,7 @@ slots:
         conditions:
           - active_loop: leave_form
             requested_slot: reason_leave
+
   confirm_leave:
     type: any
     mappings:
@@ -57,7 +58,12 @@ slots:
         intent: deny
         value: false
 
-
+  leave_type:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+  
 
 
 forms:
@@ -94,6 +100,7 @@ responses:
     - text: |
         Leave Reason: {reason_leave}
         Leave Duration: {duration_leave}
+        Detected Leave Type: *{leave_type}*
         Would you like me to post the leave application?
 
 
